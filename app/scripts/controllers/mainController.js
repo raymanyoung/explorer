@@ -114,8 +114,9 @@ angular.module('ethExplorer')
                             }
                         }
                         else {
-                            if ($scope.recenttransactions.length <= 10 && blockNumber > 0)
+                            if ($scope.recenttransactions.length <= 10 && blockNumber > 0) {
                                 getTransactionsFromBlock(--blockNumber, maxBlockToScan)
+                            }
                         }
                     });
                 }

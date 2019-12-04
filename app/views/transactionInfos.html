@@ -1,5 +1,32 @@
 <div class="container" style="padding-top:5px;">
-
+<script
+  src="https://code.jquery.com/jquery-3.4.1.slim.min.js"
+  integrity="sha256-pasqAKBDmFT4eHoN2ndd6lN370kFiGUFyTiUHWhU7k8="
+  crossorigin="anonymous"></script>
+<script>
+    function convertToInt(hex) {
+        return parseInt(hex, 16);
+    }
+    function convertToString(hex) {
+        var str = '';
+        for (var i = 2; (i < hex.length && hex.substr(i, 2) !== '00'); i += 2)
+            str += String.fromCharCode(parseInt(hex.substr(i, 2), 16));
+        return str;
+    }
+    function convert() {
+        var data = $('#data').text();
+        var type = $('#type').val();
+        var result = '';
+        if (type == 'int') {
+            result = convertToInt(data);
+        }
+        if (type == 'text') {
+            result = convertToString(data);
+        }
+      //  alert(result);
+        $('#converted').text(result);
+    }
+</script>
     <h1><i class="fa fa-exchange"></i> Transaction
         <small>View information about an Ethereum transaction</small>
     </h1>
@@ -77,10 +104,25 @@
             </tr>
             <tr>
                 <td>Data</td>
-                <td><textarea class="input-data-textarea" readonly>{{input}}</textarea></td>
+                <td><textarea id="data" class="input-data-textarea" readonly>{{input}}</textarea>
+                </td>
             </tr>
-
-
+            <tr>
+                <td>Convert Data</td>
+                <td>
+                    <select id="type">
+                        <option value="int">数字</option>
+                        <option value="text">字符串</option>
+                    </select>
+                    <button onclick="convert()">Convert</button>
+                </td>
+            </tr>
+            <tr>
+                <td>Converted Data</td>
+                <td>
+                    <textarea id="converted" class="input-data-textarea" readonly></textarea>
+                </td>
+            </tr>            
             </tbody>
         </table>
       </div>
