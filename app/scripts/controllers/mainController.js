@@ -6,11 +6,11 @@ angular.module('ethExplorer')
     })
     .controller('mainCtrl', function ($rootScope, $scope, $location) {
         // Display & update block list
-        getETHRates();
+        //getETHRates();
         updateBlockList();
         updateTXList();
         updateStats();
-        getHashrate();
+        // getHashrate();
 
         // web3.eth.filter("latest", function (error, result) {
         //     if (!error) {
@@ -240,7 +240,7 @@ angular.module('filters', [])
             if (isNaN(txt)) return txt;
             var b = new BigNumber(txt);
             var w = web3.fromWei(b, "ether");
-            return w.toFixed(6) + " ETH";
+            return w.toFixed(6) + " GAS";
         };
     })
     .filter('timestampAge', function () {

@@ -12,23 +12,17 @@
 </div>
 <div class="container" style="padding-top: 20px;">
   <div class="row">
-      <div class="col-md-2" align="center">
+      <div class="col-md-3" align="center">
           <div class="boxi">Current Block:<br/>{{ currentBlockNumber }}</div>
       </div>
-      <div class="col-md-2" align="center">
-          <div class="boxi">ETH/USD Price:<br/>{{ ethprice || "Loading.." }}</div>
-      </div>
-      <div class="col-md-2" align="center">
+      <div class="col-md-3" align="center">
           <div class="boxi">Gas Limit:<br/>{{ gasLimit || "Loading.." }}</div>
       </div>
-      <div class="col-md-2" align="center">
+      <div class="col-md-3" align="center">
           <div class="boxi">Block Time:<br/>{{ blocktime?blocktime+" second(s)":false || "Loading.." }}</div>
       </div>
-      <div class="col-md-2" align="center">
+      <div class="col-md-3" align="center">
           <div class="boxi">Current Diff:<br/>{{ difficulty || "Loading.." | diffFormat }}</div>
-      </div>
-      <div class="col-md-2" align="center">
-          <div class="boxi">Hashrate:<br/>{{ hashrate|| "Loading.." | hashFormat }}</div>
       </div>
   </div>
   <h1><i class="fa fa-cubes"></i> Recent Blocks <small>Most Recent Blocks in the Ethereum Network</small></h1><br />
@@ -40,7 +34,6 @@
             </td>
             <td>Block Hash</td>
             <td>Difficulty</td>
-            <td>Miner</td>
             <td>
                 Size
             </td>
@@ -61,9 +54,8 @@
                         <span class="btn btn-sm btn-primary"><i class="fa fa-cube"></i> {{ block.number }}</span>
                     </a>
                 </td>
-                <td><a href="/#/block/{{ block.hash }}"><span class="btn btn-sm btn-success">{{ block.hash | truncate : 12 }}</span></a></td>
+                <td><a href="/#/block/{{ block.hash }}"><span class="btn btn-sm btn-success">{{ block.hash | truncate : 64 }}</span></a></td>
                 <td style="vertical-align:middle;">{{ block.difficulty | diffFormat }}</td>
-                <td style="vertical-align:middle;"><a href="/#/address/{{ block.miner }}">{{ block.miner }}</a></td>
                 <td style="vertical-align:middle;">
                     {{ block.size | sizeFormat }}
                 </td>
