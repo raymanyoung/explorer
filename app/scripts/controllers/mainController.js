@@ -5,7 +5,6 @@ angular.module('ethExplorer')
         $rootScope.locationPath = $location.$$path;
     })
     .controller('mainCtrl', function ($rootScope, $scope, $location) {
-
         // Display & update block list
         getETHRates();
         updateBlockList();
@@ -13,16 +12,16 @@ angular.module('ethExplorer')
         updateStats();
         getHashrate();
 
-        web3.eth.filter("latest", function (error, result) {
-            if (!error) {
-                getETHRates();
-                updateBlockList();
-                updateTXList();
-                updateStats();
-                getHashrate();
-                $scope.$apply();
-            }
-        });
+        // web3.eth.filter("latest", function (error, result) {
+        //     if (!error) {
+        //         getETHRates();
+        //         updateBlockList();
+        //         updateTXList();
+        //         updateStats();
+        //         getHashrate();
+        //         $scope.$apply();
+        //     }
+        // });
 
         function updateStats() {
             web3.eth.getBlockNumber(function (err, currentBlockNumber) {
@@ -80,35 +79,43 @@ angular.module('ethExplorer')
 
         function updateTXList() {
             web3.eth.getBlockNumber(function (err, currentBlockNumber) {
-                if (err)
+                if (err) {
                     return console.log(err);
+                }
                 $scope.txNumber = currentBlockNumber;
                 $scope.recenttransactions = [];
 
-                getTransactionsFromBlock(currentBlockNumber);
+                getTransactionsFromBlock(currentBlockNumber, currentBlockNumber - 1000);
 
-                function getTransactionsFromBlock(blockNumber) {
+                function getTransactionsFromBlock(blockNumber, maxBlockToScan) {
+                    if (blockNumber < maxBlockToScan) return;
                     web3.eth.getBlock(blockNumber, true, function (err, block) {
                         if (err) {
                             console.log(err);
-                            return getTransactionsFromBlock(blockNumber);
+                            return getTransactionsFromBlock(blockNumber, maxBlockToScan);
                         }
 
                         var transInBlock = [];
-                        var loopLimit = 10;
+                        var loopLimit = 100;
 
                         if (loopLimit > block.transactions.length)
                             loopLimit = block.transactions.length;
 
-                        for (var i = 0; i < loopLimit; i++) {
-                            transInBlock.push(block.transactions[i]);
+                        if (loopLimit > 0) {
+                            for (var i = 0; i < loopLimit + 1; i++) {
+                                transInBlock.push(block.transactions[i]);
 
-                            if (i === loopLimit - 1) {
-                                $scope.recenttransactions = $scope.recenttransactions.concat(transInBlock);
-                                $scope.$apply();
-                                if ($scope.recenttransactions.length <= 10 && blockNumber > 0)
-                                    getTransactionsFromBlock(--blockNumber)
+                                if (i === loopLimit - 1) {
+                                    $scope.recenttransactions = $scope.recenttransactions.concat(transInBlock);
+                                    $scope.$apply();
+                                    if ($scope.recenttransactions.length <= 10 && blockNumber > 0)
+                                        getTransactionsFromBlock(--blockNumber, maxBlockToScan)
+                                }
                             }
+                        }
+                        else {
+                            if ($scope.recenttransactions.length <= 10 && blockNumber > 0)
+                                getTransactionsFromBlock(--blockNumber, maxBlockToScan)
                         }
                     });
                 }
